@@ -6,6 +6,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Replicator {
+	/// <summary>
+	/// Asset representing and providing a pool of GameObjects.
+	/// </summary>
 	[CreateAssetMenu(menuName = Strings.PoolMenuName, fileName = Strings.PoolFileName, order = 203)]
 	public class ObjectPool : ScriptableObject {
 		[SerializeField, Tooltip(Strings.PrefabTooltip)]
