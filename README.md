@@ -12,7 +12,7 @@ I've been working on this system on and off for a little while. I decided it sho
 
 🚧 __Replicator is still under construction.__ *There is __no stable version__ yet* 🚧
 
-__Current Version:__ [0.1-alpha](../../releases/tag/v0.1.1-alpha)
+__Current Version:__ [0.1-alpha](../../releases/tag/v0.1-alpha)
 
 ## Getting Started
 
