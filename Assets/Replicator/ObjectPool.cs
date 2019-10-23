@@ -104,7 +104,7 @@ namespace Replicator {
 
 		private PooledObject newPooledObjectInstance() {
 			GameObject instance = instantiateInactive(prefab);
-			PooledObject pooledObject = instance.GetOrAddComponent<PooledObject>();
+			PooledObject pooledObject = instance.GetComponent<PooledObject>() ?? instance.AddComponent<PooledObject>();
 			pooledObject.SetOwner(this);
 			return pooledObject;
 		}
