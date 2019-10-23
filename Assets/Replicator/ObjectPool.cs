@@ -20,10 +20,17 @@ namespace Replicator {
 
 		private Stack<PooledObject> pool;
 
+		internal event Action OnDisablePool;
+
 		private void OnEnable() {
 			pool = new Stack<PooledObject>();
 			GameObjectExtensions.poolRegistry.Add(prefab, this);
 			SceneManager.sceneLoaded += onSceneLoaded;
+		}
+
+		private void OnDisable() {
+			GameObjectExtensions.poolRegistry.Remove(prefab);
+			OnDisablePool?.Invoke();
 		}
 
 		private void onSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -79,7 +86,7 @@ namespace Replicator {
 				throw new InvalidOperationException(Strings.NotInPool);
 			}
 			else {
-				deactivatePooledObject(pooledObject);
+				reclaimPooledObject(pooledObject);
 				IRecycled[] recycleHandlers = pooledObject.gameObject.GetComponentsInChildren<IRecycled>();
 				foreach(IRecycled recycleHandler in recycleHandlers) {
 					recycleHandler.OnRecycle();
@@ -102,20 +109,20 @@ namespace Replicator {
 			return pooledObject;
 		}
 
-		private GameObject instantiateInactive(GameObject source) {
+		private static GameObject instantiateInactive(GameObject source) {
 			GameObject instance = Instantiate(source);
 			instance.SetActive(false);
 			instance.hideFlags = HideFlags.HideInHierarchy;
 			return instance;
 		}
 
-		private void deactivatePooledObject(PooledObject pooledObject) {
+		private static void reclaimPooledObject(PooledObject pooledObject) {
 			pooledObject.gameObject.SetActive(false);
 			pooledObject.gameObject.hideFlags = HideFlags.HideInHierarchy;
 			pooledObject.transform.SetParent(null);
 		}
 
-		private void logUnableToRecycle(string reason) {
+		private static void logUnableToRecycle(string reason) {
 			Debug.LogFormat(Strings.CantRecycleFormat, reason);
 		}
 	}

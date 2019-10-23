@@ -6,6 +6,10 @@ namespace Replicator {
 		private ObjectPool owner;
 		private bool recycleFlag;
 
+		private void Awake() {
+			hideFlags = HideFlags.HideInInspector;
+		}
+
 		private void LateUpdate() {
 			if(recycleFlag) {
 				recycleFlag = false;
@@ -16,6 +20,8 @@ namespace Replicator {
 		public void SetOwner(ObjectPool newOwner) {
 			if(owner == null) {
 				owner = newOwner;
+				GameObjectExtensions.poolRegistry.Add(gameObject, owner);
+				owner.OnDisablePool += () => GameObjectExtensions.poolRegistry.Remove(gameObject);
 			}
 			else Debug.Log(Strings.SetOwnerOnOwned);
 		}
@@ -34,7 +40,6 @@ namespace Replicator {
 
 		public void OnSpawn() {
 			gameObject.hideFlags = HideFlags.None;
-			hideFlags = HideFlags.HideInInspector;
 		}
 
 		public void OnRecycle() {

@@ -5,7 +5,7 @@ namespace Replicator {
 	public static partial class GameObjectExtensions {
 		// Provide a registry of 'live' pools internally to facilitate mimicking the Instantiate / Destroy API.
 		private static Dictionary<GameObject, ObjectPool> poolByGameObject;
-		internal static Dictionary<GameObject, ObjectPool> poolRegistry { get { return poolByGameObject; } }
+		internal static IDictionary<GameObject, ObjectPool> poolRegistry => poolByGameObject;
 		static GameObjectExtensions() {
 			poolByGameObject = new Dictionary<GameObject, ObjectPool>();
 		}
