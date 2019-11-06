@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Script for cleanup of ParticleSystems when they are recyled & to emulate Awake behaviour when spawned.
+
 ### Changed
 
 - The preload configuration option is now numeric, allowing less than the capacity of an Object Pool to be pre-loaded
