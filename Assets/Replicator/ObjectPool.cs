@@ -14,9 +14,9 @@ namespace Replicator {
 		[SerializeField, Tooltip(Strings.PrefabTooltip)]
 		private GameObject prefab;
 		[SerializeField, Tooltip(Strings.PreLoadTooltip)]
-		private bool preLoad;
+		private uint preLoad;
 		[SerializeField, Tooltip(Strings.CapacityTooltip)]
-		private int capacity;
+		private uint capacity;
 		[SerializeField, Tooltip(Strings.GrowTooltip)]
 		private bool grow;
 		private int activeObjectCount;
@@ -37,7 +37,7 @@ namespace Replicator {
 		}
 
 		private void onSceneLoaded(Scene scene, LoadSceneMode mode) {
-			if(preLoad) {
+			if(preLoad > 0) {
 				preloadObjects();
 			}
 		}
@@ -100,7 +100,7 @@ namespace Replicator {
 		}
 
 		private void preloadObjects() {
-			for(int i = 0; i < capacity; i++) {
+			for(int i = 0; i < Mathf.Min(preLoad, capacity); i++) {
 				pool.Push(newPooledObjectInstance());
 			}
 		}

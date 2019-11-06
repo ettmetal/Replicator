@@ -2,7 +2,7 @@
 	internal static partial class Strings {
 		#region OBJECT_POOL
 		public const string PrefabTooltip = "The prefab that will be used to populate the pool.";
-		public const string PreLoadTooltip = "Should the pool preload its objects? The alternative is instantiating them as needed.";
+		public const string PreLoadTooltip = "The number of objects to pre-load. If set to 0, all objects will be instantiated as needed.";
 		public const string CapacityTooltip = "The maximum capacity of the pool.";
 		public const string GrowTooltip = "Should the pool be allowed to grow? When it reaches capcity, it will continue to instantiate ";
 		public const string PoolMenuName = "Object Pool";
