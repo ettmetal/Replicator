@@ -13,13 +13,13 @@ namespace Replicator {
 	public class ObjectPool : ScriptableObject {
 		[SerializeField, Tooltip(Strings.PrefabTooltip)]
 		private GameObject prefab;
-		[SerializeField, Tooltip(Strings.PreLoadTooltip)]
-		private uint preLoad;
 		[SerializeField, Tooltip(Strings.CapacityTooltip)]
-		private uint capacity;
+		private ushort capacity;
+		[SerializeField, Tooltip(Strings.PreLoadTooltip)]
+		private ushort preLoad;
 		[SerializeField, Tooltip(Strings.GrowTooltip)]
 		private bool grow;
-		private int activeObjectCount;
+		private ushort activeObjectCount;
 
 		private Stack<PooledObject> pool;
 
@@ -127,6 +127,10 @@ namespace Replicator {
 
 		private static void logUnableToRecycle(string reason) {
 			Debug.LogFormat(Strings.CantRecycleFormat, reason);
+		}
+
+		private void OnValidate() {
+			if(preLoad > capacity) preLoad = capacity;
 		}
 	}
 }
