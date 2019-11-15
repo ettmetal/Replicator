@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Script for cleanup of ParticleSystems when they are recyled & to emulate Awake behaviour when spawned.
+- Scripts for cleanup of ParticleSystems when they are recyled & to emulate Awake behaviour when spawned.
 
 ### Changed
 
