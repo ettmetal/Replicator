@@ -12,6 +12,9 @@
 		public const string NotInPool = "It does not belong to this pool.";
 		public const string UnableToSpawn = "";
 		#endregion
+		#region VARIANT_POOL
+		public const string VariantPoolMenuName = "Multi-Object Pool";
+		#endregion
 		#region POOLED_OBJECT
 		public const string SetOwnerOnOwned = "SetOwner attempted on a game object which already belongs to a pool. No change made.";
 		#endregion

@@ -26,24 +26,14 @@ namespace Replicator {
 			else Debug.Log(Strings.SetOwnerOnOwned);
 		}
 
-		public bool BelongsTo(ObjectPool pool) {
-			return owner == pool;
-		}
+		public bool BelongsTo(ObjectPool pool) => owner == pool;
 
-		public void Recycle() {
-			recycleFlag = true;
-		}
+		public void Recycle() => recycleFlag = true;
 
-		public GameObject Spawn(GameObject original) {
-			return owner.Spawn(transform.position, Quaternion.identity);
-		}
+		public GameObject Spawn(GameObject original) => owner.Spawn(transform.position, Quaternion.identity);
 
-		public void OnSpawn() {
-			gameObject.hideFlags = HideFlags.None;
-		}
+		public void OnSpawn() => gameObject.hideFlags = HideFlags.None;
 
-		public void OnRecycle() {
-			gameObject.hideFlags = HideFlags.HideInHierarchy;
-		}
+		public void OnRecycle() => gameObject.hideFlags = HideFlags.HideInHierarchy;
 	}
 }
