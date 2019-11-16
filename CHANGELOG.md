@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Scripts for cleanup of ParticleSystems when they are recyled & to play when spawned if they are set to Play On Awake.
+- Added a 'Variant Pool' capable of spawning one of a number of predefined variants.
 
 ### Changed
 
