@@ -25,12 +25,12 @@ namespace Replicator {
 
 		private void OnEnable() {
 			initialisePool();
-			GameObjectExtensions.poolRegistry.Add(prefab, this);
+			registerSelf();
 			SceneManager.sceneLoaded += onSceneLoaded;
 		}
 
 		private void OnDisable() {
-			GameObjectExtensions.poolRegistry.Remove(prefab);
+			deregisterSelf();
 			OnDisablePool?.Invoke();
 		}
 
@@ -80,7 +80,7 @@ namespace Replicator {
 		internal void Recycle(PooledObject pooledObject) {
 			if(!pooledObject.BelongsTo(this)) {
 				throw new InvalidOperationException(Strings.NotInPool);
-			} 
+			}
 			else {
 				reclaimPooledObject(pooledObject);
 				triggerRecycleHandlers(pooledObject.gameObject);
@@ -90,6 +90,14 @@ namespace Replicator {
 		}
 
 		protected virtual void initialisePool() => pool = new Stack<PooledObject>();
+
+		protected virtual void registerSelf() {
+			if(prefab != null) GameObjectExtensions.poolRegistry.Add(prefab, this);
+		}
+
+		protected virtual void deregisterSelf() {
+			if(prefab != null) GameObjectExtensions.poolRegistry.Remove(prefab);
+		}
 
 		protected virtual bool hasAvailableSpawnees() => pool.Count > 0;
 

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable 649 // Prevent field not initialized warnings
+
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Replicator {
@@ -16,8 +18,24 @@ namespace Replicator {
 			base.initialisePool();
 			variantPools = new Dictionary<GameObject, Stack<GameObject>>();
 			foreach(GameObject variant in variants) {
-				GameObjectExtensions.poolRegistry.Add(variant, this);
+				if(variant == null) continue;
 				variantPools.Add(variant, new Stack<GameObject>());
+			}
+		}
+
+		protected override void registerSelf() {
+			base.registerSelf();
+			foreach(GameObject variant in variants) {
+				if(variant == null) continue;
+				GameObjectExtensions.poolRegistry.Add(variant, this);
+			}
+		}
+
+		protected override void deregisterSelf() {
+			base.deregisterSelf();
+			foreach(GameObject variant in variants) {
+				if(variant == null) continue;
+				GameObjectExtensions.poolRegistry.Remove(variant);
 			}
 		}
 
@@ -26,6 +44,7 @@ namespace Replicator {
 			int variantsWithExtra = amountToPreload % (variants.Length + 1);
 			base.preloadObjects(preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
 			foreach(GameObject variant in variants) {
+				if(variant == null) continue;
 				populatePool(variant, preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
 			}
 		}
