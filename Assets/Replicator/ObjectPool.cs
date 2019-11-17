@@ -80,13 +80,10 @@ namespace Replicator {
 		internal void Recycle(PooledObject pooledObject) {
 			if(!pooledObject.BelongsTo(this)) {
 				throw new InvalidOperationException(Strings.NotInPool);
-			}
+			} 
 			else {
 				reclaimPooledObject(pooledObject);
-				IRecycled[] recycleHandlers = pooledObject.gameObject.GetComponentsInChildren<IRecycled>();
-				foreach(IRecycled recycleHandler in recycleHandlers) {
-					recycleHandler.OnRecycle();
-				}
+				triggerRecycleHandlers(pooledObject.gameObject);
 				pool.Push(pooledObject);
 				activeObjectCount--;
 			}
@@ -115,6 +112,13 @@ namespace Replicator {
 			ISpawned[] spawnHandlers = target.GetComponentsInChildren<ISpawned>();
 			foreach(ISpawned spawnHandler in spawnHandlers) {
 				spawnHandler.OnSpawn();
+			}
+		}
+
+		protected static void triggerRecycleHandlers(GameObject target) {
+			IRecycled[] recycleHandlers = target.GetComponentsInChildren<IRecycled>();
+			foreach(IRecycled recycleHandler in recycleHandlers) {
+				recycleHandler.OnRecycle();
 			}
 		}
 

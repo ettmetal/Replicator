@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Replicator {
 	/// <summary>
-	/// Asset representing and providing a pool of GameObjects.
+	/// Asset representing and providing a mixed pool of GameObjects.
 	/// </summary>
 	[CreateAssetMenu(menuName = Strings.VariantPoolMenuName, fileName = Strings.PoolFileName, order = 204)]
 	public class VariantPool : ObjectPool {
