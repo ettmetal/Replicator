@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Replicator {
 	[AddComponentMenu("")] // Prevents this Component from appearing in the Unity editor.
@@ -21,9 +21,14 @@ namespace Replicator {
 			if(owner == null) {
 				owner = newOwner;
 				GameObjectExtensions.poolRegistry.Add(gameObject, owner);
-				owner.OnDisablePool += () => GameObjectExtensions.poolRegistry.Remove(gameObject);
+				owner.OnDisablePool += deregisterInstance;
 			}
 			else Debug.Log(Strings.SetOwnerOnOwned);
+		}
+
+		private void deregisterInstance() {
+			GameObjectExtensions.poolRegistry.Remove(gameObject);
+			owner.OnDisablePool -= deregisterInstance;
 		}
 
 		public bool BelongsTo(ObjectPool pool) => owner == pool;
