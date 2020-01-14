@@ -71,6 +71,7 @@ Full details can be found at the [API Wiki](../../wiki/API).
 Some Unity components, such as `Rigidbody`, require some special handling to ensure that behaviour following recycling / re-spawning is as expected. As an example, a `Rigidbody` does not reset its `velocity` or `angularVelocity` when deactivated. Replicator includes scripts, found in the Component menu under Pooling, for cleaning up the following commonly-used Components:
 
 - `ParticleSystem`
+- `ParticleSystem (Multi)` (i.e. GameObjects with many ParticleSystems in themseleves + children)
 - `Rigidbody`
 - `Rigidbody2D`
 
