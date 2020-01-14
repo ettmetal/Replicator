@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The preload configuration option is now numeric, allowing less than the capacity of an Object Pool to be pre-loaded
 - Object Pool capacity no longer accepts negative numbers
 - Tidied up some tooltips
+- Spawn / Despawn no longer sets HideFlags, but only sets/unsets the appropriate bit, to play better with client code
 
 ## [0.1-alpha]
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace Replicator {
 	[AddComponentMenu("")] // Prevents this Component from appearing in the Unity editor.
@@ -32,8 +32,8 @@ namespace Replicator {
 
 		public GameObject Spawn(GameObject original) => owner.Spawn(transform.position, Quaternion.identity);
 
-		public void OnSpawn() => gameObject.hideFlags = HideFlags.None;
+		public void OnSpawn() => gameObject.hideFlags |= HideFlags.HideInHierarchy;
 
-		public void OnRecycle() => gameObject.hideFlags = HideFlags.HideInHierarchy;
+		public void OnRecycle() => gameObject.hideFlags &= ~HideFlags.HideInHierarchy;
 	}
 }
