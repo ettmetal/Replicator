@@ -21,29 +21,24 @@ namespace Replicator {
 			if(owner == null) {
 				owner = newOwner;
 				GameObjectExtensions.poolRegistry.Add(gameObject, owner);
-				owner.OnDisablePool += () => GameObjectExtensions.poolRegistry.Remove(gameObject);
+				owner.OnDisablePool += deregisterInstance;
 			}
 			else Debug.Log(Strings.SetOwnerOnOwned);
 		}
 
-		public bool BelongsTo(ObjectPool pool) {
-			return owner == pool;
+		private void deregisterInstance() {
+			GameObjectExtensions.poolRegistry.Remove(gameObject);
+			owner.OnDisablePool -= deregisterInstance;
 		}
 
-		public void Recycle() {
-			recycleFlag = true;
-		}
+		public bool BelongsTo(ObjectPool pool) => owner == pool;
 
-		public GameObject Spawn(GameObject original) {
-			return owner.Spawn(transform.position, Quaternion.identity);
-		}
+		public void Recycle() => recycleFlag = true;
 
-		public void OnSpawn() {
-			gameObject.hideFlags = HideFlags.None;
-		}
+		public GameObject Spawn(GameObject original) => owner.Spawn(transform.position, Quaternion.identity);
 
-		public void OnRecycle() {
-			gameObject.hideFlags = HideFlags.HideInHierarchy;
-		}
+		public void OnSpawn() => gameObject.hideFlags |= HideFlags.HideInHierarchy;
+
+		public void OnRecycle() => gameObject.hideFlags &= ~HideFlags.HideInHierarchy;
 	}
 }
