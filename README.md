@@ -13,11 +13,11 @@ I've been working on this system on and off for a little while. I decided it sho
 
 🚧 __Replicator is still under construction.__ *There is __no stable version__ yet* 🚧
 
-__Current Version:__ [0.1-alpha](../../releases/tag/v0.1-alpha)
+__Current Version:__ [0.2.0-alpha](../../releases/tag/v0.2.0-alpha)
 
 ## Getting Started
 
-Replicator makes it simple to rework existing code to use object pooling. Set up a pool, swap `Instantiate` calls to `Spawn` and `Destroy` calls to `Recycle`.
+Replicator makes it simple to rework existing code to use object pooling. Set up a pool, swap `Instantiate` calls to `Spawn` and `Destroy` calls to `Recycle`, then grab a cup of coffee or something.
 
 First, create an Object Pool in your project.
 
@@ -39,6 +39,8 @@ Your object pool is set up and ready to use! Making sure your script has a `usin
     }
 }
 ```
+
+*Version 0.2.0-alpha introduced multi-object pools, which work similarly but will randomly pick an available object to spawn from among those specified.*
 
 With a flexible API, there are several ways to `Spawn()` / `Recycle()` GameObjects in whichever way makes sense for your project. As long as a prefab is assigned to a pool, you can use the GameObject reference for `Spawn()`-ing & `Recycle()`-ing too:
 
@@ -68,7 +70,7 @@ Full details can be found at the [API Wiki](../../wiki/API).
 
 ### Good to Know
 
-Some Unity components, such as `Rigidbody`, require some special handling to ensure that behaviour following recycling / re-spawning is as expected. As an example, a `Rigidbody` does not reset its `velocity` or `angularVelocity` when deactivated. Replicator includes scripts, found in the Component menu under Pooling, for cleaning up the following commonly-used Components:
+Some Unity components, such as `Rigidbody`, require some special handling to ensure that behaviour following recycling / re-spawning is as expected. As an example, a `Rigidbody` does not reset its `velocity` or `angularVelocity` properties when deactivated. Replicator includes scripts, found in the Component menu under Pooling, for cleaning up the following commonly-used Components:
 
 - `ParticleSystem`
 - `ParticleSystem (Multi)` (i.e. GameObjects with many ParticleSystems in themseleves + children)
