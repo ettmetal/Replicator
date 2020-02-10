@@ -13,7 +13,7 @@ I've been working on this system on and off for a little while. I decided it sho
 
 🚧 __Replicator is still under construction.__ *There is __no stable version__ yet* 🚧
 
-__Current Version:__ [0.2.0-alpha](../../releases/tag/v0.2.0-alpha)
+__Current Version:__ [0.2.0-alpha](../../releases/tag/v0.2.0-alpha), known to work with Unity 2018.3
 
 ## Getting Started
 
