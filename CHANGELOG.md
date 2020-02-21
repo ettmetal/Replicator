@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated the Multi-Object pool's editor for better usability
 - Replicator is now targeting Unity 2019.3
+- Refactoring clean-ups
 
 ## [0.2.0-alpha]
 
