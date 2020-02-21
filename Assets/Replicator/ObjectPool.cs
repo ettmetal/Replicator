@@ -92,11 +92,11 @@ namespace Replicator {
 		protected virtual void initialisePool() => pool = new Stack<PooledObject>();
 
 		protected virtual void registerSelf() {
-			if(prefab != null) GameObjectExtensions.poolRegistry.Add(prefab, this);
+			if(prefab != null) PoolRegistry.pools.Add(prefab, this);
 		}
 
 		protected virtual void deregisterSelf() {
-			if(prefab != null) GameObjectExtensions.poolRegistry.Remove(prefab);
+			if(prefab != null) PoolRegistry.pools.Remove(prefab);
 		}
 
 		protected virtual bool hasAvailableSpawnees() => pool.Count > 0;

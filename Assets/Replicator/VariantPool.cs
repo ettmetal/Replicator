@@ -27,7 +27,7 @@ namespace Replicator {
 			base.registerSelf();
 			foreach(GameObject variant in variants) {
 				if(variant == null) continue;
-				GameObjectExtensions.poolRegistry.Add(variant, this);
+				PoolRegistry.pools.Add(variant, this);
 			}
 		}
 
@@ -35,7 +35,7 @@ namespace Replicator {
 			base.deregisterSelf();
 			foreach(GameObject variant in variants) {
 				if(variant == null) continue;
-				GameObjectExtensions.poolRegistry.Remove(variant);
+				PoolRegistry.pools.Remove(variant);
 			}
 		}
 

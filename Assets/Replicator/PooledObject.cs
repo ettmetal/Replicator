@@ -20,14 +20,14 @@ namespace Replicator {
 		public void SetOwner(ObjectPool newOwner) {
 			if(owner == null) {
 				owner = newOwner;
-				GameObjectExtensions.poolRegistry.Add(gameObject, owner);
+				PoolRegistry.pools.Add(gameObject, owner);
 				owner.OnDisablePool += deregisterInstance;
 			}
 			else Debug.Log(Strings.SetOwnerOnOwned);
 		}
 
 		private void deregisterInstance() {
-			GameObjectExtensions.poolRegistry.Remove(gameObject);
+			PoolRegistry.pools.Remove(gameObject);
 			owner.OnDisablePool -= deregisterInstance;
 		}
 
