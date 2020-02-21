@@ -99,6 +99,6 @@ Here are some ways you can help make Replicator better:
 
 ## License
 
-Copyright © 2019 [Joe Osborne](https://gihub.com/ettmetal/).
+Copyright © 2019-2020 [Joe Osborne](https://gihub.com/ettmetal/).
 
 Replicator is released under the MIT license. Refer to [LICENSE.md](LICENSE.md) in this repository for more information.
