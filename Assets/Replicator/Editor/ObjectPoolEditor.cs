@@ -9,6 +9,7 @@ namespace Replicator.Editor {
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("capacity"));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("preLoad"));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("grow"));
+			EditorGUILayout.PropertyField(serializedObject.FindProperty("hideUnspawned"));
 			serializedObject.ApplyModifiedProperties();
 		}
 	}

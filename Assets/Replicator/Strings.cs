@@ -11,6 +11,7 @@
 		public const string NotPooled = "It does not belong to a pool.";
 		public const string NotInPool = "It does not belong to this pool.";
 		public const string UnableToSpawn = "";
+		public const string HideUnspawedTooltip = "Should unspawned objects from this pool be visible in the hierarchy?";
 		#endregion
 		#region VARIANT_POOL
 		public const string VariantPoolMenuName = "Multi-Object Pool";

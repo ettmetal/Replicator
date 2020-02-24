@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649 // Prevent field not initialized warnings
+#pragma warning disable 649 // Prevent field not initialized warnings
 
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,8 @@ namespace Replicator {
 		private ushort preLoad;
 		[SerializeField, Tooltip(Strings.GrowTooltip)]
 		private bool grow;
+		[SerializeField, Tooltip(Strings.HideUnspawedTooltip)]
+		internal bool hideUnspawned = true;
 		private ushort activeObjectCount;
 		private Stack<PooledObject> pool;
 		internal event Action OnDisablePool;
