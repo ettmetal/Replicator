@@ -1,4 +1,4 @@
-#pragma warning disable 649 // Prevent field not initialized warnings
+﻿#pragma warning disable 649 // Prevent field not initialized warnings
 
 using System;
 using System.Collections.Generic;
@@ -135,7 +135,9 @@ namespace Replicator {
 		protected GameObject instantiateInactive(GameObject source) {
 			GameObject instance = Instantiate(source);
 			instance.SetActive(false);
-			instance.hideFlags = HideFlags.HideInHierarchy;
+#if UNITY_EDITOR
+			if(hideUnspawned) instance.hideFlags |= HideFlags.HideInHierarchy;
+#endif
 			PooledObject pooledObject = instance.GetComponent<PooledObject>() ?? instance.AddComponent<PooledObject>();
 			pooledObject.SetOwner(this);
 			return instance;
@@ -143,7 +145,6 @@ namespace Replicator {
 
 		private static void reclaimPooledObject(PooledObject pooledObject) {
 			pooledObject.gameObject.SetActive(false);
-			pooledObject.gameObject.hideFlags = HideFlags.HideInHierarchy;
 			pooledObject.transform.SetParent(null);
 		}
 

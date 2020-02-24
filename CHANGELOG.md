@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Pools can be individually configered to hide/show despawned objects in the hierarchy (default: hide)
+
 ### Changed
 
 - Updated the Multi-Object pool's editor for better usability

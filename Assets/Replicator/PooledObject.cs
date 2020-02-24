@@ -2,13 +2,33 @@
 
 namespace Replicator {
 	[AddComponentMenu("")] // Prevents this Component from appearing in the Unity editor.
-	internal class PooledObject : MonoBehaviour, IPooled {
+	internal class PooledObject : MonoBehaviour
+	#if UNITY_EDITOR
+	, IPooled
+	#endif
+	{
 		private ObjectPool owner;
 		private bool recycleFlag;
 
+#region HideInHierarchy
+#if UNITY_EDITOR
 		private void Awake() {
 			hideFlags = HideFlags.HideInInspector;
+			if(owner.hideUnspawned) gameObject.hideFlags |= HideFlags.HideInHierarchy;
+			UnityEditor.EditorApplication.DirtyHierarchyWindowSorting();
 		}
+
+		public void OnSpawn() {
+			if(owner.hideUnspawned) gameObject.hideFlags &= ~HideFlags.HideInHierarchy;
+			UnityEditor.EditorApplication.DirtyHierarchyWindowSorting();
+		}
+
+		public void OnRecycle() {
+			if(owner.hideUnspawned) gameObject.hideFlags |= HideFlags.HideInHierarchy;
+			UnityEditor.EditorApplication.DirtyHierarchyWindowSorting();
+		}
+#endif
+#endregion
 
 		private void LateUpdate() {
 			if(recycleFlag) {
@@ -36,9 +56,5 @@ namespace Replicator {
 		public void Recycle() => recycleFlag = true;
 
 		public GameObject Spawn(GameObject original) => owner.Spawn(transform.position, Quaternion.identity);
-
-		public void OnSpawn() => gameObject.hideFlags |= HideFlags.HideInHierarchy;
-
-		public void OnRecycle() => gameObject.hideFlags &= ~HideFlags.HideInHierarchy;
 	}
 }
