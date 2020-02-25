@@ -4,7 +4,7 @@
 		public const string PrefabTooltip = "The prefab that will be used to populate the pool.";
 		public const string PreLoadTooltip = "The number of objects to pre-load. If set to 0, all objects will be instantiated as needed. Cannot be higher than capacity.";
 		public const string CapacityTooltip = "The maximum capacity of the pool.";
-		public const string GrowTooltip = "Should the pool be allowed to grow? When it reaches capcity, it will expand and instantiate new object when required.";
+		public const string GrowTooltip = "Should the pool be allowed to grow? When it reaches capcity, new instances will be created depending on the selected strategy, e.g. Half adds half the capacity again, Double adds the whole capacity again.";
 		public const string PoolMenuName = "Object Pool";
 		public const string PoolFileName = "New Object Pool";
 		public const string CantRecycleFormat = "It is not possible to recyle this GameObject. {0}";

@@ -11,6 +11,7 @@ namespace Replicator {
 	/// </summary>
 	[CreateAssetMenu(menuName = Strings.PoolMenuName, fileName = Strings.PoolFileName, order = 203)]
 	public class ObjectPool : ScriptableObject {
+		protected enum GrowthStrategy { None, Single, Tenth, Quarter, Half, Double }
 		[SerializeField, Tooltip(Strings.PrefabTooltip)]
 		private GameObject prefab;
 		[SerializeField, Tooltip(Strings.CapacityTooltip)]
@@ -18,7 +19,7 @@ namespace Replicator {
 		[SerializeField, Tooltip(Strings.PreLoadTooltip)]
 		private ushort preLoad;
 		[SerializeField, Tooltip(Strings.GrowTooltip)]
-		private bool grow;
+		private GrowthStrategy growth = GrowthStrategy.None;
 		[SerializeField, Tooltip(Strings.HideUnspawedTooltip)]
 		internal bool hideUnspawned = true;
 		private ushort activeObjectCount;
@@ -39,7 +40,7 @@ namespace Replicator {
 		private void OnValidate() => preLoad = (ushort)Mathf.Min(preLoad, capacity);
 
 		private void onSceneLoaded(Scene scene, LoadSceneMode mode) {
-			if(preLoad > 0) preloadObjects(preLoad);
+			if(preLoad > 0) addNewObjects(preLoad);
 		}
 
 		/// <summary>
@@ -49,7 +50,7 @@ namespace Replicator {
 		/// <param name="rotation">Rotation of the spawned GameObject</param>
 		/// <param name="parent">(optional) Parent of the spawned GameObject</param>
 		public GameObject Spawn(Vector3 position, Quaternion rotation, Transform parent = null) {
-			if(grow && !hasAvailableSpawnees()) expand();
+			if(growth != GrowthStrategy.None && !hasAvailableSpawnees()) expand();
 			GameObject spawned = getObjectToSpawn();
 			if(spawned == null) {
 				Debug.Log(Strings.UnableToSpawn);
@@ -103,12 +104,20 @@ namespace Replicator {
 
 		protected virtual bool hasAvailableSpawnees() => pool.Count > 0;
 
-		protected virtual void expand() => pool.Push(newPooledObjectInstance());
+		protected virtual void expand() {
+			int growAmount = 0;
+			if(growth == GrowthStrategy.Single) growAmount = 1;
+			if(growth == GrowthStrategy.Tenth) growAmount = capacity / 10;
+			if(growth == GrowthStrategy.Quarter) growAmount = capacity / 4;
+			if(growth == GrowthStrategy.Half) growAmount = capacity / 2;
+			if(growth == GrowthStrategy.Double) growAmount = capacity * 2;
+			addNewObjects(growAmount);
+		}
 
 		protected virtual GameObject getObjectToSpawn() => pool.Pop().gameObject;
 
-		protected virtual void preloadObjects(int amountToPreload) {
-			for(int i = 0; i < Mathf.Min(amountToPreload, capacity); i++) {
+		protected virtual void addNewObjects(int amountToAdd) {
+			for(int i = 0; i < Mathf.Min(amountToAdd, capacity); i++) {
 				pool.Push(newPooledObjectInstance());
 			}
 		}

@@ -39,10 +39,10 @@ namespace Replicator {
 			}
 		}
 
-		protected override void preloadObjects(int amountToPreload) {
+		protected override void addNewObjects(int amountToPreload) {
 			int preloadPerVariant = amountToPreload / (variants.Length + 1);
 			int variantsWithExtra = amountToPreload % (variants.Length + 1);
-			base.preloadObjects(preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
+			base.addNewObjects(preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
 			foreach(GameObject variant in variants) {
 				if(variant == null) continue;
 				populatePool(variant, preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
