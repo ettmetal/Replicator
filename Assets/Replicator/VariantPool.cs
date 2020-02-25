@@ -55,6 +55,11 @@ namespace Replicator {
 			return variantPools[variants[typeToSpawn]].Pop();
 		}
 
+		protected override bool hasAvailableSpawnees() {
+			foreach(Stack<GameObject> pool in variantPools.Values) if(pool.Count > 0) return true;
+			return base.hasAvailableSpawnees(); 
+		}
+
 		private void populatePool(GameObject pooledObject, int amountToAdd){
 			for(int i = 0; i < amountToAdd; i++) {
 				variantPools[pooledObject].Push(instantiateInactive(pooledObject));

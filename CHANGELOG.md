@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replicator is now targeting Unity 2019.3
 - Refactoring clean-ups
 
+### Fixed
+
+- [#3] - Multi-pools where the underlying base variant is not available to spawn will now allow other variants to spawn
+
 ## [0.2.0-alpha]
 
 ### Added
@@ -42,3 +46,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [0.2.0-alpha]: https://github.com/ettmetal/Replicator/compare/0.1-alpha...0.2.0-alpha
 [0.1-alpha]: https://github.com/ettmetal/Replicator/compare/a2010e58963b3f15a45031087ad54d5d1ac82bc0...0.1-alpha
+
+[#3]: https://github.com/ettmetal/Replicator/issues/3
