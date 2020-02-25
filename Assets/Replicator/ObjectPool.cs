@@ -50,7 +50,8 @@ namespace Replicator {
 		/// <param name="rotation">Rotation of the spawned GameObject</param>
 		/// <param name="parent">(optional) Parent of the spawned GameObject</param>
 		public GameObject Spawn(Vector3 position, Quaternion rotation, Transform parent = null) {
-			if(growth != GrowthStrategy.None && !hasAvailableSpawnees()) expand();
+			if(canSpawn() && !hasAvailableSpawnees()) expand(GrowthStrategy.Single);
+			else if(growth != GrowthStrategy.None && !canSpawn()) expand(growth);
 			GameObject spawned = getObjectToSpawn();
 			if(spawned == null) {
 				Debug.Log(Strings.UnableToSpawn);
@@ -103,14 +104,14 @@ namespace Replicator {
 		}
 
 		protected virtual bool hasAvailableSpawnees() => pool.Count > 0;
-
-		protected virtual void expand() {
+		protected virtual bool canSpawn() => activeObjectCount + pool.Count < capacity;
+		protected virtual void expand(GrowthStrategy strategy) {
 			int growAmount = 0;
-			if(growth == GrowthStrategy.Single) growAmount = 1;
-			if(growth == GrowthStrategy.Tenth) growAmount = capacity / 10;
-			if(growth == GrowthStrategy.Quarter) growAmount = capacity / 4;
-			if(growth == GrowthStrategy.Half) growAmount = capacity / 2;
-			if(growth == GrowthStrategy.Double) growAmount = capacity * 2;
+			if(strategy == GrowthStrategy.Single) growAmount = 1;
+			if(strategy == GrowthStrategy.Tenth) growAmount = capacity / 10;
+			if(strategy == GrowthStrategy.Quarter) growAmount = capacity / 4;
+			if(strategy == GrowthStrategy.Half) growAmount = capacity / 2;
+			if(strategy == GrowthStrategy.Double) growAmount = capacity * 2;
 			addNewObjects(growAmount);
 		}
 

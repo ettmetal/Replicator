@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Pools can be individually configered to hide/show despawned objects in the hierarchy (default: hide)
+- Pools can be individually configured to hide/show despawned objects in the hierarchy (default: hide)
 - Particle system cleanup now allows configuration of clear behaviour
+- The behaviour to use when growing a pool is now configurable
 
 ### Changed
 
