@@ -19,5 +19,8 @@
 		#region POOLED_OBJECT
 		public const string SetOwnerOnOwned = "SetOwner attempted on a game object which already belongs to a pool. No change made.";
 		#endregion
+		#region PARTICLE_SYSTEM
+		public const string ParticlesResetTooltip = "Should the particles in the system be cleard (Default) or remain?";
+		#endregion
 	}
 }
