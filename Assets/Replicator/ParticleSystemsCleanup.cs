@@ -4,7 +4,7 @@ namespace Replicator {
 	[AddComponentMenu("Pooling/Particle System Cleanup (Mutli)")]
 	public class ParticleSystemsCleanup : MonoBehaviour, IPooled {
 		[SerializeField, Tooltip(Strings.ParticlesResetTooltip)]
-		private ParticleSystemStopBehavior resetBehaviour;
+		private ParticleSystemStopBehavior resetBehaviour = ParticleSystemStopBehavior.StopEmittingAndClear;
 		private ParticleSystem[] particleSystems;
 
 		private void Start() {

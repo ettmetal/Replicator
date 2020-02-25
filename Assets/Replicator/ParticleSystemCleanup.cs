@@ -5,7 +5,7 @@ namespace Replicator {
 	[RequireComponent(typeof(ParticleSystem))]
 	public class ParticleSystemCleanup : MonoBehaviour, IPooled {
 		[SerializeField, Tooltip(Strings.ParticlesResetTooltip)]
-		private ParticleSystemStopBehavior resetBehaviour;
+		private ParticleSystemStopBehavior resetBehaviour = ParticleSystemStopBehavior.StopEmittingAndClear;
 		private new ParticleSystem particleSystem;
 
 		private void Start() {
