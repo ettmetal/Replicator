@@ -13,13 +13,13 @@ I've been working on this system on and off for a little while. I decided it sho
 
 🚧 __Replicator is still under construction.__ *There is __no stable version__ yet* 🚧
 
-__Current Version:__ [0.2.0-alpha](../../releases/tag/v0.2.0-alpha), known to work with Unity 2018.3
+__Current Version:__ [0.3.0-alpha](../../releases/tag/0.3.0-alpha), known to work with Unity 2019.3. It _may_ work with Unity 2018.3 and / or other previous versions of Unity.
 
 The Project's Roadmap is relativley well covered by its [GitHub Milestones](../../milestones), which group together issues to give an overview of upcoming changes.
 
 ## Getting Started
 
-Replicator makes it simple to rework existing code to use object pooling. Set up a pool, swap `Instantiate` calls to `Spawn` and `Destroy` calls to `Recycle`, then grab a cup of coffee or something.
+Replicator makes it simple to rework existing code to use object pooling. Set up a pool, swap `Instantiate` calls to `Spawn` and `Destroy` calls to `Recycle`, then grab a cup of coffee or something ☕.
 
 First, create an Object Pool in your project.
 
@@ -27,7 +27,7 @@ First, create an Object Pool in your project.
 
 Configure the pool (refer to the [Manual](../../wiki/Manual) for guidance on pool configuration).
 
-![Object Pool as it appears in the Unity inspector, with fields for prefab, pre-loading, capacity and pool growth](./screenshots/object-pool.png)
+![Object Pool as it appears in the Unity inspector, with options for prefab, pre-loading, capacity and pool growth](./screenshots/object-pool.png)
 
 Your object pool is set up and ready to use! Making sure your script has a `using Replicator;` directive, the basics are:
 
@@ -42,7 +42,7 @@ Your object pool is set up and ready to use! Making sure your script has a `usin
 }
 ```
 
-*Version 0.2.0-alpha introduced multi-object pools, which work similarly but will randomly pick an available object to spawn from among those specified.*
+*Multi-object pools work similarly but will randomly pick an available object to spawn from among those specified.*
 
 With a flexible API, there are several ways to `Spawn()` / `Recycle()` GameObjects in whichever way makes sense for your project. As long as a prefab is assigned to a pool, you can use the GameObject reference for `Spawn()`-ing & `Recycle()`-ing too:
 
@@ -56,7 +56,7 @@ void Update() {
 }
 ```
 
-On top of that, extensions to MonoBehaviour allow your scripts to directly call `Spawn()` or `Recycle()` in much the same manner as `Instantiate()` and `Destroy()`:
+On top of that, extensions to MonoBehaviour allow your scripts to directly call `Spawn()` or `Recycle()` in the same way as `Instantiate()` and `Destroy()`:
 
 ```csharp
 void Update() {
