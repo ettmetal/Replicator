@@ -15,6 +15,8 @@ I've been working on this system on and off for a little while. I decided it sho
 
 __Current Version:__ [0.2.0-alpha](../../releases/tag/v0.2.0-alpha), known to work with Unity 2018.3
 
+The Project's Roadmap is relativley well covered by its [GitHub Milestones](../../milestones), which group together issues to give an overview of upcoming changes.
+
 ## Getting Started
 
 Replicator makes it simple to rework existing code to use object pooling. Set up a pool, swap `Instantiate` calls to `Spawn` and `Destroy` calls to `Recycle`, then grab a cup of coffee or something.
