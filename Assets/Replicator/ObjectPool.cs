@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649 // Prevent field not initialized warnings
+#pragma warning disable 649 // Prevent field not initialized warnings
 
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace Replicator {
 		[SerializeField, Tooltip(Strings.CapacityTooltip)]
 		private ushort capacity;
 		[SerializeField, Tooltip(Strings.PreLoadTooltip)]
-		private ushort preLoad;
+		private ushort preLoad = ushort.MaxValue; // Using this is a bit of a hack to signify 'unedited' but negates the need for another serialized field
 		[SerializeField, Tooltip(Strings.GrowTooltip)]
 		private GrowthStrategy growth = GrowthStrategy.None;
 		[SerializeField, Tooltip(Strings.HideUnspawedTooltip)]
@@ -27,6 +27,7 @@ namespace Replicator {
 		internal event Action OnDisablePool;
 
 		private void OnEnable() {
+			preLoad = preLoad == ushort.MaxValue ? capacity : preLoad;
 			initialisePool();
 			registerSelf();
 			SceneManager.sceneLoaded += onSceneLoaded;

@@ -8,33 +8,22 @@ namespace Replicator.Editor {
 	/// Editor for VariantPools, taking into account that the base class's prefab attribute should be treated as element 0 of the variants.
 	/// </summary>
 	[CustomEditor(typeof(VariantPool))]
-	public class VariantPoolEditor : UnityEditor.Editor {
+	public class VariantPoolEditor : ObjectPoolEditor {
 		private ReorderableList variantsList;
 		private int lastSelectedIndex;
 		private void OnEnable() { // Set up reorderable list with blank elements and add callbacks
 			variantsList = new ReorderableList(getDummyElements(), typeof(GameObject));
-			variantsList.drawHeaderCallback  = drawListHeader;
-			variantsList.onAddCallback       = addListElement;
-			variantsList.onRemoveCallback    = removeElement;
+			variantsList.drawHeaderCallback = drawListHeader;
+			variantsList.onAddCallback = addListElement;
+			variantsList.onRemoveCallback = removeElement;
 			variantsList.onCanRemoveCallback = canRemoveElement;
-			variantsList.onChangedCallback   = listChanged;
-			variantsList.onReorderCallback   = reorderElements;
+			variantsList.onChangedCallback = listChanged;
+			variantsList.onReorderCallback = reorderElements;
 			variantsList.drawElementCallback = drawListElement;
-			variantsList.onSelectCallback    = captureSelectedIndex;
+			variantsList.onSelectCallback = captureSelectedIndex;
 		}
 
-		public override void OnInspectorGUI() {
-			serializedObject.UpdateIfRequiredOrScript();
-			variantsField();
-			EditorGUILayout.PropertyField(serializedObject.FindProperty("capacity"));
-			EditorGUILayout.PropertyField(serializedObject.FindProperty("preLoad"));
-			EditorGUILayout.PropertyField(serializedObject.FindProperty("growth"));
-			EditorGUILayout.PropertyField(serializedObject.FindProperty("hideUnspawned"));
-			serializedObject.ApplyModifiedProperties();
-		}
-
-		private void variantsField() { // edit all the variants as a single array
-			SerializedProperty basePrefab = serializedObject.FindProperty("prefab");
+		protected override void prefabField(SerializedProperty basePrefab) { // edit all the variants as a single array
 			SerializedProperty variants = serializedObject.FindProperty("variants");
 			variants.isExpanded = EditorGUILayout.Foldout(variants.isExpanded, "Variants");
 			if(variants.isExpanded) {
@@ -54,7 +43,8 @@ namespace Replicator.Editor {
 		private SerializedProperty getElement(int index) { // Get variant at a given index, accounting for the base prefab
 			return index == 0 ? serializedObject.FindProperty("prefab") : serializedObject.FindProperty("variants").GetArrayElementAtIndex(--index);
 		}
-		// Callbacks for reorderable list
+
+		#region ReorderableList callbacks
 		private void drawListHeader(Rect rect) => EditorGUI.LabelField(rect, "Variants");
 		private void addListElement(ReorderableList list) => serializedObject.FindProperty("variants").arraySize++;
 		// Can't remove the base prefab, can only nullify it
@@ -63,7 +53,7 @@ namespace Replicator.Editor {
 		private void listChanged(ReorderableList list) => list.list = getDummyElements();
 		// Used for reordering
 		private void captureSelectedIndex(ReorderableList list) => lastSelectedIndex = list.index;
-		private void removeElement(ReorderableList list){
+		private void removeElement(ReorderableList list) {
 			SerializedProperty prop = serializedObject.FindProperty("variants");
 			prop.GetArrayElementAtIndex(list.index - 1).objectReferenceValue = null;
 			prop.DeleteArrayElementAtIndex(list.index - 1);
@@ -81,5 +71,6 @@ namespace Replicator.Editor {
 			a.objectReferenceValue = b.objectReferenceValue;
 			b.objectReferenceValue = temp;
 		}
+		#endregion
 	}
 }
