@@ -27,7 +27,7 @@ namespace Replicator {
 			base.registerSelf();
 			foreach(GameObject variant in variants) {
 				if(variant == null) continue;
-				GameObjectExtensions.poolRegistry.Add(variant, this);
+				PoolRegistry.pools.Add(variant, this);
 			}
 		}
 
@@ -35,14 +35,14 @@ namespace Replicator {
 			base.deregisterSelf();
 			foreach(GameObject variant in variants) {
 				if(variant == null) continue;
-				GameObjectExtensions.poolRegistry.Remove(variant);
+				PoolRegistry.pools.Remove(variant);
 			}
 		}
 
-		protected override void preloadObjects(int amountToPreload) {
+		protected override void addNewObjects(int amountToPreload) {
 			int preloadPerVariant = amountToPreload / (variants.Length + 1);
 			int variantsWithExtra = amountToPreload % (variants.Length + 1);
-			base.preloadObjects(preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
+			base.addNewObjects(preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
 			foreach(GameObject variant in variants) {
 				if(variant == null) continue;
 				populatePool(variant, preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
@@ -53,6 +53,11 @@ namespace Replicator {
 			int typeToSpawn = Random.Range(-1, variants.Length);
 			if(typeToSpawn < 0) return base.getObjectToSpawn();
 			return variantPools[variants[typeToSpawn]].Pop();
+		}
+
+		protected override bool hasAvailableSpawnees() {
+			foreach(Stack<GameObject> pool in variantPools.Values) if(pool.Count > 0) return true;
+			return base.hasAvailableSpawnees(); 
 		}
 
 		private void populatePool(GameObject pooledObject, int amountToAdd){

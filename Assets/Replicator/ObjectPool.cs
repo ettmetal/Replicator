@@ -1,4 +1,4 @@
-﻿#pragma warning disable 649 // Prevent field not initialized warnings
+#pragma warning disable 649 // Prevent field not initialized warnings
 
 using System;
 using System.Collections.Generic;
@@ -11,19 +11,23 @@ namespace Replicator {
 	/// </summary>
 	[CreateAssetMenu(menuName = Strings.PoolMenuName, fileName = Strings.PoolFileName, order = 203)]
 	public class ObjectPool : ScriptableObject {
+		protected enum GrowthStrategy { None, Single, Tenth, Quarter, Half, Double }
 		[SerializeField, Tooltip(Strings.PrefabTooltip)]
 		private GameObject prefab;
 		[SerializeField, Tooltip(Strings.CapacityTooltip)]
 		private ushort capacity;
 		[SerializeField, Tooltip(Strings.PreLoadTooltip)]
-		private ushort preLoad;
+		private ushort preLoad = ushort.MaxValue; // Using this is a bit of a hack to signify 'unedited' but negates the need for another serialized field
 		[SerializeField, Tooltip(Strings.GrowTooltip)]
-		private bool grow;
+		private GrowthStrategy growth = GrowthStrategy.None;
+		[SerializeField, Tooltip(Strings.HideUnspawedTooltip)]
+		internal bool hideUnspawned = true;
 		private ushort activeObjectCount;
 		private Stack<PooledObject> pool;
 		internal event Action OnDisablePool;
 
 		private void OnEnable() {
+			preLoad = preLoad == ushort.MaxValue ? capacity : preLoad;
 			initialisePool();
 			registerSelf();
 			SceneManager.sceneLoaded += onSceneLoaded;
@@ -37,7 +41,7 @@ namespace Replicator {
 		private void OnValidate() => preLoad = (ushort)Mathf.Min(preLoad, capacity);
 
 		private void onSceneLoaded(Scene scene, LoadSceneMode mode) {
-			if(preLoad > 0) preloadObjects(preLoad);
+			if(preLoad > 0) addNewObjects(preLoad);
 		}
 
 		/// <summary>
@@ -47,7 +51,8 @@ namespace Replicator {
 		/// <param name="rotation">Rotation of the spawned GameObject</param>
 		/// <param name="parent">(optional) Parent of the spawned GameObject</param>
 		public GameObject Spawn(Vector3 position, Quaternion rotation, Transform parent = null) {
-			if(grow && !hasAvailableSpawnees()) expand();
+			if(canSpawn() && !hasAvailableSpawnees()) expand(GrowthStrategy.Single);
+			else if(growth != GrowthStrategy.None && !canSpawn()) expand(growth);
 			GameObject spawned = getObjectToSpawn();
 			if(spawned == null) {
 				Debug.Log(Strings.UnableToSpawn);
@@ -92,21 +97,29 @@ namespace Replicator {
 		protected virtual void initialisePool() => pool = new Stack<PooledObject>();
 
 		protected virtual void registerSelf() {
-			if(prefab != null) GameObjectExtensions.poolRegistry.Add(prefab, this);
+			if(prefab != null) PoolRegistry.pools.Add(prefab, this);
 		}
 
 		protected virtual void deregisterSelf() {
-			if(prefab != null) GameObjectExtensions.poolRegistry.Remove(prefab);
+			if(prefab != null) PoolRegistry.pools.Remove(prefab);
 		}
 
 		protected virtual bool hasAvailableSpawnees() => pool.Count > 0;
-
-		protected virtual void expand() => pool.Push(newPooledObjectInstance());
+		protected virtual bool canSpawn() => activeObjectCount + pool.Count < capacity;
+		protected virtual void expand(GrowthStrategy strategy) {
+			int growAmount = 0;
+			if(strategy == GrowthStrategy.Single) growAmount = 1;
+			if(strategy == GrowthStrategy.Tenth) growAmount = capacity / 10;
+			if(strategy == GrowthStrategy.Quarter) growAmount = capacity / 4;
+			if(strategy == GrowthStrategy.Half) growAmount = capacity / 2;
+			if(strategy == GrowthStrategy.Double) growAmount = capacity * 2;
+			addNewObjects(growAmount);
+		}
 
 		protected virtual GameObject getObjectToSpawn() => pool.Pop().gameObject;
 
-		protected virtual void preloadObjects(int amountToPreload) {
-			for(int i = 0; i < Mathf.Min(amountToPreload, capacity); i++) {
+		protected virtual void addNewObjects(int amountToAdd) {
+			for(int i = 0; i < Mathf.Min(amountToAdd, capacity); i++) {
 				pool.Push(newPooledObjectInstance());
 			}
 		}
@@ -133,7 +146,9 @@ namespace Replicator {
 		protected GameObject instantiateInactive(GameObject source) {
 			GameObject instance = Instantiate(source);
 			instance.SetActive(false);
-			instance.hideFlags = HideFlags.HideInHierarchy;
+#if UNITY_EDITOR
+			if(hideUnspawned) instance.hideFlags |= HideFlags.HideInHierarchy;
+#endif
 			PooledObject pooledObject = instance.GetComponent<PooledObject>() ?? instance.AddComponent<PooledObject>();
 			pooledObject.SetOwner(this);
 			return instance;
@@ -141,7 +156,6 @@ namespace Replicator {
 
 		private static void reclaimPooledObject(PooledObject pooledObject) {
 			pooledObject.gameObject.SetActive(false);
-			pooledObject.gameObject.hideFlags = HideFlags.HideInHierarchy;
 			pooledObject.transform.SetParent(null);
 		}
 

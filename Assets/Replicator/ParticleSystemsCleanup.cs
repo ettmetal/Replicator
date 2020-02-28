@@ -3,6 +3,8 @@
 namespace Replicator {
 	[AddComponentMenu("Pooling/Particle System Cleanup (Mutli)")]
 	public class ParticleSystemsCleanup : MonoBehaviour, IPooled {
+		[SerializeField, Tooltip(Strings.ParticlesResetTooltip)]
+		private ParticleSystemStopBehavior resetBehaviour = ParticleSystemStopBehavior.StopEmittingAndClear;
 		private ParticleSystem[] particleSystems;
 
 		private void Start() {
@@ -11,7 +13,8 @@ namespace Replicator {
 
 		public void OnRecycle() {
 			foreach(ParticleSystem particles in particleSystems) {
-				particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+				particles.Stop(true, resetBehaviour);
+				particles.time = 0;
 			}
 		}
 
