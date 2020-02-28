@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated the Multi-Object pool's editor for better usability
 - Replicator is now targeting Unity 2019.3
 - Refactoring clean-ups
+- Pools' default behaviour has been changed to pre-load their full capacity. This can be disabled by editing their Pre Load option
 
 ### Fixed
 
