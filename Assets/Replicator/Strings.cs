@@ -1,4 +1,4 @@
-namespace Replicator {
+﻿namespace Replicator {
 	internal static partial class Strings {
 		#region OBJECT_POOL
 		public const string PrefabTooltip = "The prefab that will be used to populate the pool.";
@@ -15,6 +15,7 @@ namespace Replicator {
 		#endregion
 		#region VARIANT_POOLS
 		public const string RandomPoolMenuName = "Random Pool";
+		public const string SequentialPoolMenuName = "Sequential Pool";
 		#endregion
 		#region POOLED_OBJECT
 		public const string SetOwnerOnOwned = "SetOwner attempted on a game object which already belongs to a pool. No change made.";

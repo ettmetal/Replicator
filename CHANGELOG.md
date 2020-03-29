@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- New sequential pool type
+
 ### Changed
 
 - Refactored VariantPool into an abstract class that can be used as a base for other multi-pool strategies
+- RandomPool is now a subtype of VariantPool
 
 ## [0.3.0-alpha]
 
