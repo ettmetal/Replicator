@@ -8,7 +8,7 @@ namespace Replicator {
 	public abstract class VariantPool : ObjectPool {
 		[SerializeField]
 		private GameObject[] variants;
-		
+
 		private Dictionary<GameObject, Stack<GameObject>> variantPools;
 
 		/// <summary>The total number of variants provided by the pool</summary>
@@ -50,22 +50,36 @@ namespace Replicator {
 		}
 
 		protected override GameObject getObjectToSpawn() {
-			int typeToSpawn = getSpawnIndex();
-			if(typeToSpawn == 0) return base.getObjectToSpawn();
-			return variantPools[variants[--typeToSpawn]].Pop();
+			int spawnIndex = getSpawnIndex(availableVariantIndicies());
+			if(spawnIndex == 0) return base.getObjectToSpawn();
+			return variantPools[variants[spawnIndex - 1]].Pop();
 		}
 
-		protected abstract int getSpawnIndex();
+		protected abstract int getSpawnIndex(int[] availableVariantIndicies);
 
 		protected override bool hasAvailableSpawnees() {
 			foreach(Stack<GameObject> pool in variantPools.Values) if(pool.Count > 0) return true;
-			return base.hasAvailableSpawnees(); 
+			return base.hasAvailableSpawnees();
 		}
 
-		private void populatePool(GameObject pooledObject, int amountToAdd){
+		private void populatePool(GameObject pooledObject, int amountToAdd) {
 			for(int i = 0; i < amountToAdd; i++) {
 				variantPools[pooledObject].Push(instantiateInactive(pooledObject));
 			}
+		}
+
+		private int[] availableVariantIndicies() {
+			List<int> collector = new List<int>();
+			if(base.hasAvailableSpawnees()) {
+				collector.Add(0);
+			}
+			foreach(GameObject variant in variants) {
+				if(variant == null || variantPools[variant].Count < 1) {
+					continue;
+				}
+				collector.Add(System.Array.IndexOf(variants, variant) + 1);
+			}
+			return collector.ToArray();
 		}
 	}
 }
