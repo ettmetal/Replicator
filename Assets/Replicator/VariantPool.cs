@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Replicator {
-	/// <summary>
-	/// Asset representing and providing a mixed pool of GameObjects.
-	/// </summary>
-	[CreateAssetMenu(menuName = Strings.VariantPoolMenuName, fileName = Strings.PoolFileName, order = 204)]
-	public class VariantPool : ObjectPool {
+	/// <summary>Asset representing and providing a mixed pool of GameObjects.</summary>
+	public abstract class VariantPool : ObjectPool {
 		[SerializeField]
 		private GameObject[] variants;
 		
 		private Dictionary<GameObject, Stack<GameObject>> variantPools;
+
+		/// <summary>The total number of variants provided by the pool</summary>
+		public int VariantCount => variants.Length + 1;
 
 		protected override void initialisePool() {
 			base.initialisePool();
@@ -50,10 +50,12 @@ namespace Replicator {
 		}
 
 		protected override GameObject getObjectToSpawn() {
-			int typeToSpawn = Random.Range(-1, variants.Length);
-			if(typeToSpawn < 0) return base.getObjectToSpawn();
-			return variantPools[variants[typeToSpawn]].Pop();
+			int typeToSpawn = getSpawnIndex();
+			if(typeToSpawn == 0) return base.getObjectToSpawn();
+			return variantPools[variants[--typeToSpawn]].Pop();
 		}
+
+		protected abstract int getSpawnIndex();
 
 		protected override bool hasAvailableSpawnees() {
 			foreach(Stack<GameObject> pool in variantPools.Values) if(pool.Count > 0) return true;
