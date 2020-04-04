@@ -7,7 +7,7 @@ namespace Replicator.Editor {
 	/// <summary>
 	/// Editor for VariantPools, taking into account that the base class's prefab attribute should be treated as element 0 of the variants.
 	/// </summary>
-	[CustomEditor(typeof(VariantPool))]
+	[CustomEditor(typeof(VariantPool), true)]
 	public class VariantPoolEditor : ObjectPoolEditor {
 		private ReorderableList variantsList;
 		private int lastSelectedIndex;
