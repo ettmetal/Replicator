@@ -9,12 +9,14 @@ namespace Replicator.Editor {
 			prefabField(serializedObject.FindProperty("prefab"));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("capacity"));
 			preLoadField(serializedObject.FindProperty("preLoad"), serializedObject.FindProperty("capacity"));
-			EditorGUILayout.PropertyField(serializedObject.FindProperty("growth"));
+			growthField(serializedObject.FindProperty("growth"));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("hideUnspawned"));
 			serializedObject.ApplyModifiedProperties();
 		}
 
 		protected virtual void prefabField(SerializedProperty prefab) => EditorGUILayout.PropertyField(prefab);
+
+		protected virtual void growthField(SerializedProperty growth) => EditorGUILayout.PropertyField(growth);
 
 		// Sets the preLoad value equal to capacity, so long as it has not been manually edited
 		protected void preLoadField(SerializedProperty preLoad, SerializedProperty capacity) {
