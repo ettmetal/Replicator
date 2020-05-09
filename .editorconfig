@@ -88,10 +88,10 @@ csharp_style_var_for_built_in_types = false:warning
 csharp_style_var_when_type_is_apparent = false:warning
 csharp_style_var_elsewhere = flase:warning
 
-# Prefer method-like constructs to have a block body
-csharp_style_expression_bodied_methods = false:suggestion
-csharp_style_expression_bodied_constructors = false:suggestion
-csharp_style_expression_bodied_operators = false:suggestion
+# Prefer method-like constructs to have an expression body
+csharp_style_expression_bodied_methods = true:suggestion
+csharp_style_expression_bodied_constructors = true:suggestion
+csharp_style_expression_bodied_operators = true:suggestion
 
 # Prefer property-like constructs to have an expression body
 csharp_style_expression_bodied_properties = true:suggestion
