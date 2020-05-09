@@ -19,6 +19,8 @@
 		#endregion
 		#region BURST_POOL
 		public const string BurstPoolMenuName = "Burst Pool";
+		public const string BurstPoolCullMaxTooltip = "The maximum number of instances to cull in any frame";
+		public const string BurstPoolCullIntervalTooltip = "The interval, in seconds, to wait between culling expired instances";
 		#endregion
 		#region POOLED_OBJECT
 		public const string SetOwnerOnOwned = "SetOwner attempted on a game object which already belongs to a pool. No change made.";
