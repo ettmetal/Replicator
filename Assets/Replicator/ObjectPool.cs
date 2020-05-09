@@ -26,6 +26,9 @@ namespace Replicator {
 		private Stack<PooledObject> pool;
 		internal event Action OnDisablePool;
 
+		protected virtual bool canSpawn => activeObjectCount + pool.Count < capacity;
+		protected virtual bool canGrow => growth != GrowthStrategy.None;
+
 		private void OnEnable() {
 			preLoad = preLoad == ushort.MaxValue ? capacity : preLoad;
 			initialisePool();
@@ -51,8 +54,8 @@ namespace Replicator {
 		/// <param name="rotation">Rotation of the spawned GameObject</param>
 		/// <param name="parent">(optional) Parent of the spawned GameObject</param>
 		public GameObject Spawn(Vector3 position, Quaternion rotation, Transform parent = null) {
-			if(canSpawn() && !hasAvailableSpawnees()) expand(GrowthStrategy.Single);
-			else if(growth != GrowthStrategy.None && !canSpawn()) expand(growth);
+			if(canSpawn && !hasAvailableSpawnees()) expand(GrowthStrategy.Single);
+			else if(canGrow && !canSpawn) expand(growth);
 			GameObject spawned = getObjectToSpawn();
 			if(spawned == null) {
 				Debug.Log(Strings.UnableToSpawn);
@@ -87,12 +90,14 @@ namespace Replicator {
 				throw new InvalidOperationException(Strings.NotInPool);
 			}
 			else {
-				reclaimPooledObject(pooledObject);
+				resetPooledObject(pooledObject);
 				triggerRecycleHandlers(pooledObject.gameObject);
-				pool.Push(pooledObject);
+				reclaimRecycledObject(pooledObject);
 				activeObjectCount--;
 			}
 		}
+
+		private protected virtual void reclaimRecycledObject(PooledObject recycled) => pool.Push(recycled);
 
 		protected virtual void initialisePool() => pool = new Stack<PooledObject>();
 
@@ -105,7 +110,7 @@ namespace Replicator {
 		}
 
 		protected virtual bool hasAvailableSpawnees() => pool.Count > 0;
-		protected virtual bool canSpawn() => activeObjectCount + pool.Count < capacity;
+
 		protected virtual void expand(GrowthStrategy strategy) {
 			int growAmount = 0;
 			if(strategy == GrowthStrategy.Single) growAmount = 1;
@@ -124,7 +129,7 @@ namespace Replicator {
 			}
 		}
 
-		private PooledObject newPooledObjectInstance() {
+		private protected PooledObject newPooledObjectInstance() {
 			GameObject instance = instantiateInactive(prefab);
 			return instance.GetComponent<PooledObject>();
 		}
@@ -154,7 +159,7 @@ namespace Replicator {
 			return instance;
 		}
 
-		private static void reclaimPooledObject(PooledObject pooledObject) {
+		private static void resetPooledObject(PooledObject pooledObject) {
 			pooledObject.gameObject.SetActive(false);
 			pooledObject.transform.SetParent(null);
 		}

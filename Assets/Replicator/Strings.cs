@@ -17,6 +17,9 @@
 		public const string RandomPoolMenuName = "Random Pool";
 		public const string SequentialPoolMenuName = "Sequential Pool";
 		#endregion
+		#region BURST_POOL
+		public const string BurstPoolMenuName = "Burst Pool";
+		#endregion
 		#region POOLED_OBJECT
 		public const string SetOwnerOnOwned = "SetOwner attempted on a game object which already belongs to a pool. No change made.";
 		#endregion
