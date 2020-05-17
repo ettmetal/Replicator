@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Replicator {
 	// TODO: Cleanup on scene change
-	[CreateAssetMenu(menuName = Strings.BurstPoolMenuName, fileName = Strings.PoolFileName, order = 0)] // TODO: update order
+	[CreateAssetMenu(menuName = Strings.BurstPoolMenuName, fileName = Strings.PoolFileName, order = 205)] // TODO: update order
 	/// <summary>
 	/// An <see cref="ObjectPool"/> which can expand on-demand to meet burst needs, and cull instances after use.
 	/// </summary>
