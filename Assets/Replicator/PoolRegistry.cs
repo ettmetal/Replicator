@@ -7,7 +7,7 @@ namespace Replicator {
 	/// </summary>
 	internal static class PoolRegistry {
 
-		private static Dictionary<GameObject, ObjectPool> registry = new Dictionary<GameObject, ObjectPool>();
+		private static readonly Dictionary<GameObject, ObjectPool> registry = new Dictionary<GameObject, ObjectPool>();
 		public static IDictionary<GameObject, ObjectPool> pools => registry;
 	}
 }

@@ -13,9 +13,9 @@ namespace Replicator {
 	public class ObjectPool : ScriptableObject {
 		protected enum GrowthStrategy { None, Single, Tenth, Quarter, Half, Double }
 		[SerializeField, Tooltip(Strings.PrefabTooltip)]
-		private GameObject prefab;
+		private GameObject prefab = null;
 		[SerializeField, Tooltip(Strings.CapacityTooltip)]
-		private ushort capacity;
+		private ushort capacity = 0;
 		[SerializeField, Tooltip(Strings.PreLoadTooltip)]
 		private ushort preLoad = ushort.MaxValue; // Using this is a bit of a hack to signify 'unedited' but negates the need for another serialized field
 		[SerializeField, Tooltip(Strings.GrowTooltip)]
@@ -38,7 +38,7 @@ namespace Replicator {
 			OnDisablePool?.Invoke();
 		}
 
-		private void OnValidate() => preLoad = (ushort)Mathf.Min(preLoad, capacity);
+		protected virtual void OnValidate() => preLoad = capacity > preLoad ? preLoad : capacity;
 
 		private void onSceneLoaded(Scene scene, LoadSceneMode mode) {
 			if(preLoad > 0) addNewObjects(preLoad);
@@ -64,7 +64,7 @@ namespace Replicator {
 			spawned.transform.rotation = rotation;
 
 			spawned.gameObject.SetActive(true);
-			triggerSpawnHandlers(spawned.gameObject);
+			triggerSpawnHandlers(spawned);
 			activeObjectCount++;
 			return spawned.gameObject;
 		}
@@ -109,10 +109,10 @@ namespace Replicator {
 		protected virtual void expand(GrowthStrategy strategy) {
 			int growAmount = 0;
 			if(strategy == GrowthStrategy.Single) growAmount = 1;
-			if(strategy == GrowthStrategy.Tenth) growAmount = capacity / 10;
-			if(strategy == GrowthStrategy.Quarter) growAmount = capacity / 4;
-			if(strategy == GrowthStrategy.Half) growAmount = capacity / 2;
-			if(strategy == GrowthStrategy.Double) growAmount = capacity * 2;
+			else if(strategy == GrowthStrategy.Tenth) growAmount = capacity / 10;
+			else if(strategy == GrowthStrategy.Quarter) growAmount = capacity / 4;
+			else if(strategy == GrowthStrategy.Half) growAmount = capacity / 2;
+			else if(strategy == GrowthStrategy.Double) growAmount = capacity * 2;
 			addNewObjects(growAmount);
 		}
 

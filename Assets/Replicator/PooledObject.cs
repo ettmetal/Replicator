@@ -4,7 +4,7 @@ namespace Replicator {
 	[AddComponentMenu("")] // Prevents this Component from appearing in the Unity editor.
 	internal class PooledObject : MonoBehaviour
 	#if UNITY_EDITOR
-	, IPooled
+	, IPooled // Interface used to manage HideFlags, no use outside editor
 	#endif
 	{
 		private ObjectPool owner;

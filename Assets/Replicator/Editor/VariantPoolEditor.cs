@@ -11,17 +11,16 @@ namespace Replicator.Editor {
 	public class VariantPoolEditor : ObjectPoolEditor {
 		private ReorderableList variantsList;
 		private int lastSelectedIndex;
-		private void OnEnable() { // Set up reorderable list with blank elements and add callbacks
-			variantsList = new ReorderableList(getDummyElements(), typeof(GameObject));
-			variantsList.drawHeaderCallback = drawListHeader;
-			variantsList.onAddCallback = addListElement;
-			variantsList.onRemoveCallback = removeElement;
-			variantsList.onCanRemoveCallback = canRemoveElement;
-			variantsList.onChangedCallback = listChanged;
-			variantsList.onReorderCallback = reorderElements;
-			variantsList.drawElementCallback = drawListElement;
-			variantsList.onSelectCallback = captureSelectedIndex;
-		}
+		private void OnEnable() => variantsList = new ReorderableList(getDummyElements(), typeof(GameObject)) {
+			drawHeaderCallback = drawListHeader,
+			onAddCallback = addListElement,
+			onRemoveCallback = removeElement,
+			onCanRemoveCallback = canRemoveElement,
+			onChangedCallback = listChanged,
+			onReorderCallback = reorderElements,
+			drawElementCallback = drawListElement,
+			onSelectCallback = captureSelectedIndex
+		};
 
 		protected override void prefabField(SerializedProperty basePrefab) { // edit all the variants as a single array
 			SerializedProperty variants = serializedObject.FindProperty("variants");
