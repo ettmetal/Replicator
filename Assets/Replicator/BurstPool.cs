@@ -13,14 +13,14 @@ namespace Replicator {
 		[SerializeField, Tooltip(Strings.BurstPoolCullIntervalTooltip)]
 		private float cullInterval = 5f; // Maybe interval in frames, not time?
 
-		private HashSet<PooledObject> extras = new HashSet<PooledObject>();
+		private List<PooledObject> extras = new List<PooledObject>();
 		private Stack<PooledObject> cullQueue = new Stack<PooledObject>();
 
 		private CountdownTimer cullTimer;
 
 		protected override void initialisePool() {
 			base.initialisePool();
-			extras = new HashSet<PooledObject>();
+			extras = new List<PooledObject>();
 			cullTimer = cullTimer ?? createSurrogate().AddComponent<CountdownTimer>();
 			cullTimer.Target = cullInterval;
 			cullTimer.Timeout += onCullTimerTimeout;
@@ -46,7 +46,7 @@ namespace Replicator {
 			else base.reclaimRecycledObject(recycled);
 		}
 
-		private GameObject getBurstInstance() => cullQueue.Count > 0 ? cullQueue.Pop().gameObject : extras[0]; // TODO: get available extra without breaking reclaimRecycledObject
+		private GameObject getBurstInstance() => cullQueue.Count > 0 ? reviveObjectMarkedForCull() : extras[0].gameObject;
 
 		private static GameObject createSurrogate() => new GameObject("Timer Surrogate") {
 			hideFlags = HideFlags.HideAndDontSave
@@ -61,11 +61,10 @@ namespace Replicator {
 			}
 		}
 
-		private PooledObject reviveRecycledInstance() {
-			foreach(PooledObject instance in extras) {
-				if(instance.gameObject.activeSelf) return instance;
-			}
-			return null;
+		private GameObject reviveObjectMarkedForCull() {
+			PooledObject markedObject = cullQueue.Pop();
+			extras.Add(markedObject);
+			return markedObject.gameObject;
 		}
 	}
 }
