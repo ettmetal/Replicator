@@ -11,7 +11,6 @@ namespace Replicator {
 	/// </summary>
 	[CreateAssetMenu(menuName = Strings.PoolMenuName, fileName = Strings.PoolFileName, order = 203)]
 	public class ObjectPool : ScriptableObject {
-		protected enum GrowthStrategy { None, Single, Tenth, Quarter, Half, Double }
 		[SerializeField, Tooltip(Strings.PrefabTooltip)]
 		private GameObject prefab = null;
 		[SerializeField, Tooltip(Strings.CapacityTooltip)]
