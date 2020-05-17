@@ -6,6 +6,7 @@ namespace Replicator.Editor {
 	public class ObjectPoolEditor : UnityEditor.Editor {
 		public override void OnInspectorGUI() {
 			serializedObject.UpdateIfRequiredOrScript();
+			beforeFields();
 			prefabField(serializedObject.FindProperty("prefab"));
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("capacity"));
 			preLoadField(serializedObject.FindProperty("preLoad"), serializedObject.FindProperty("capacity"));
@@ -13,6 +14,8 @@ namespace Replicator.Editor {
 			EditorGUILayout.PropertyField(serializedObject.FindProperty("hideUnspawned"));
 			serializedObject.ApplyModifiedProperties();
 		}
+
+		protected virtual void beforeFields() {}
 
 		protected virtual void prefabField(SerializedProperty prefab) => EditorGUILayout.PropertyField(prefab);
 
