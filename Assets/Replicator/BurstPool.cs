@@ -37,7 +37,6 @@ namespace Replicator {
 
 		protected override void initialisePool() {
 			base.initialisePool();
-			extras = new List<PooledObject>();
 			cullTimer = cullTimer ?? createSurrogate().AddComponent<CountdownTimer>();
 			cullTimer.Target = cullInterval;
 			cullTimer.Timeout += onCullTimerTimeout;
