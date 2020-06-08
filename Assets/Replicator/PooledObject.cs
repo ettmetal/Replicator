@@ -14,17 +14,17 @@ namespace Replicator {
 #if UNITY_EDITOR
 		private void Awake() {
 			hideFlags = HideFlags.HideInInspector;
-			if(owner.hideUnspawned) gameObject.hideFlags |= HideFlags.HideInHierarchy;
+			if(owner.HideUnspawned) gameObject.hideFlags |= HideFlags.HideInHierarchy;
 			UnityEditor.EditorApplication.DirtyHierarchyWindowSorting();
 		}
 
 		public void OnSpawn() {
-			if(owner.hideUnspawned) gameObject.hideFlags &= ~HideFlags.HideInHierarchy;
+			if(owner.HideUnspawned) gameObject.hideFlags &= ~HideFlags.HideInHierarchy;
 			UnityEditor.EditorApplication.DirtyHierarchyWindowSorting();
 		}
 
 		public void OnRecycle() {
-			if(owner.hideUnspawned) gameObject.hideFlags |= HideFlags.HideInHierarchy;
+			if(owner.HideUnspawned) gameObject.hideFlags |= HideFlags.HideInHierarchy;
 			UnityEditor.EditorApplication.DirtyHierarchyWindowSorting();
 		}
 #endif

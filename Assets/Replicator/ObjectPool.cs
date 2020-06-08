@@ -16,30 +16,30 @@ namespace Replicator {
 		[SerializeField, Tooltip(Strings.GrowTooltip)]
 		private GrowthStrategy growth = GrowthStrategy.None;
 		[SerializeField, Tooltip(Strings.HideUnspawedTooltip)]
-		internal bool hideUnspawned = true;
+		internal bool HideUnspawned = true;
 		private ushort activeObjectCount;
 		private Stack<PooledObject> pool;
 		internal event Action OnDisablePool;
 
-		protected virtual bool canSpawn => activeObjectCount + pool.Count < capacity;
-		protected virtual bool canGrow => growth != GrowthStrategy.None;
+		protected virtual bool CanSpawn => activeObjectCount + pool.Count < capacity;
+		protected virtual bool CanGrow => growth != GrowthStrategy.None;
 
 		protected virtual void OnEnable() {
 			preLoad = preLoad == ushort.MaxValue ? capacity : preLoad;
-			initialisePool();
-			registerSelf();
+			InitialisePool();
+			RegisterSelf();
 			SceneManager.sceneLoaded += onSceneLoaded;
 		}
 
 		protected virtual void OnDisable() {
-			deregisterSelf();
+			DeregisterSelf();
 			OnDisablePool?.Invoke();
 		}
 
 		protected virtual void OnValidate() => preLoad = capacity > preLoad ? preLoad : capacity;
 
 		private void onSceneLoaded(Scene scene, LoadSceneMode mode) {
-			if(preLoad > 0) addNewObjects(preLoad);
+			if(preLoad > 0) AddNewObjects(preLoad);
 		}
 
 		/// <summary>Spawn a GameObject from the pool, if one is available.</summary>
@@ -47,9 +47,9 @@ namespace Replicator {
 		/// <param name="rotation">Rotation of the spawned GameObject</param>
 		/// <param name="parent">(optional) Parent of the spawned GameObject</param>
 		public GameObject Spawn(Vector3 position, Quaternion rotation, Transform parent = null) {
-			if(canSpawn && !hasAvailableSpawnees()) expand(GrowthStrategy.Single);
-			else if(canGrow && !canSpawn) expand(growth);
-			GameObject spawned = getObjectToSpawn();
+			if(CanSpawn && !HasAvailableSpawnees()) Expand(GrowthStrategy.Single);
+			else if(CanGrow && !CanSpawn) Expand(growth);
+			GameObject spawned = GetObjectToSpawn();
 			if(spawned == null) {
 				Debug.Log(Strings.UnableToSpawn);
 				return null;
@@ -60,7 +60,7 @@ namespace Replicator {
 			spawned.transform.rotation = rotation;
 
 			spawned.gameObject.SetActive(true);
-			triggerSpawnHandlers(spawned);
+			TriggerSpawnHandlers(spawned);
 			activeObjectCount++;
 			return spawned.gameObject;
 		}
@@ -82,7 +82,7 @@ namespace Replicator {
 			}
 			else {
 				resetPooledObject(pooledObject);
-				triggerRecycleHandlers(pooledObject.gameObject);
+				TriggerRecycleHandlers(pooledObject.gameObject);
 				reclaimRecycledObject(pooledObject);
 				activeObjectCount--;
 			}
@@ -90,60 +90,60 @@ namespace Replicator {
 
 		private protected virtual void reclaimRecycledObject(PooledObject recycled) => pool.Push(recycled);
 
-		protected virtual void initialisePool() => pool = new Stack<PooledObject>();
+		protected virtual void InitialisePool() => pool = new Stack<PooledObject>();
 
-		protected virtual void registerSelf() {
+		protected virtual void RegisterSelf() {
 			if(prefab != null) PoolRegistry.Pools.Add(prefab, this);
 		}
 
-		protected virtual void deregisterSelf() {
+		protected virtual void DeregisterSelf() {
 			if(prefab != null) PoolRegistry.Pools.Remove(prefab);
 		}
 
-		protected virtual bool hasAvailableSpawnees() => pool.Count > 0;
+		protected virtual bool HasAvailableSpawnees() => pool.Count > 0;
 
-		protected virtual void expand(GrowthStrategy strategy) {
+		protected virtual void Expand(GrowthStrategy strategy) {
 			int growAmount = 0;
 			if(strategy == GrowthStrategy.Single) growAmount = 1;
 			else if(strategy == GrowthStrategy.Tenth) growAmount = capacity / 10;
 			else if(strategy == GrowthStrategy.Quarter) growAmount = capacity / 4;
 			else if(strategy == GrowthStrategy.Half) growAmount = capacity / 2;
 			else if(strategy == GrowthStrategy.Double) growAmount = capacity * 2;
-			addNewObjects(growAmount);
+			AddNewObjects(growAmount);
 		}
 
-		protected virtual GameObject getObjectToSpawn() => pool.Pop().gameObject;
+		protected virtual GameObject GetObjectToSpawn() => pool.Pop().gameObject;
 
-		protected virtual void addNewObjects(int amountToAdd) {
+		protected virtual void AddNewObjects(int amountToAdd) {
 			for(int i = 0; i < Mathf.Min(amountToAdd, capacity); i++) {
 				pool.Push(newPooledObjectInstance());
 			}
 		}
 
 		private protected PooledObject newPooledObjectInstance() {
-			GameObject instance = instantiateInactive(prefab);
+			GameObject instance = InstantiateInactive(prefab);
 			return instance.GetComponent<PooledObject>();
 		}
 
-		protected static void triggerSpawnHandlers(GameObject target) {
+		protected static void TriggerSpawnHandlers(GameObject target) {
 			ISpawned[] spawnHandlers = target.GetComponentsInChildren<ISpawned>();
 			foreach(ISpawned spawnHandler in spawnHandlers) {
 				spawnHandler.OnSpawn();
 			}
 		}
 
-		protected static void triggerRecycleHandlers(GameObject target) {
+		protected static void TriggerRecycleHandlers(GameObject target) {
 			IRecycled[] recycleHandlers = target.GetComponentsInChildren<IRecycled>();
 			foreach(IRecycled recycleHandler in recycleHandlers) {
 				recycleHandler.OnRecycle();
 			}
 		}
 
-		protected GameObject instantiateInactive(GameObject source) {
+		protected GameObject InstantiateInactive(GameObject source) {
 			GameObject instance = Instantiate(source);
 			instance.SetActive(false);
 #if UNITY_EDITOR
-			if(hideUnspawned) instance.hideFlags |= HideFlags.HideInHierarchy;
+			if(HideUnspawned) instance.hideFlags |= HideFlags.HideInHierarchy;
 #endif
 			PooledObject pooledObject = instance.GetComponent<PooledObject>() ?? instance.AddComponent<PooledObject>();
 			pooledObject.SetOwner(this);

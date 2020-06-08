@@ -35,8 +35,8 @@ namespace Replicator {
 			cullTimer.StopTimer();
 		}
 
-		protected override void initialisePool() {
-			base.initialisePool();
+		protected override void InitialisePool() {
+			base.InitialisePool();
 			cullTimer = cullTimer ?? createSurrogate().AddComponent<CountdownTimer>();
 			cullTimer.Target = cullInterval;
 			cullTimer.Timeout += onCullTimerTimeout;
@@ -44,15 +44,15 @@ namespace Replicator {
 			else cullTimer.StartTimer();
 		}
 
-		protected override bool canGrow => true;
-		protected override void addNewObjects(int amountToAdd) {
+		protected override bool CanGrow => true;
+		protected override void AddNewObjects(int amountToAdd) {
 			for(int added = 0; added < amountToAdd; added++) {
 				PooledObject instance = newPooledObjectInstance();
 				extras.Add(instance);
 			}
 		}
 
-		protected override GameObject getObjectToSpawn() => base.hasAvailableSpawnees() ? base.getObjectToSpawn() : getBurstInstance();
+		protected override GameObject GetObjectToSpawn() => base.HasAvailableSpawnees() ? base.GetObjectToSpawn() : getBurstInstance();
 
 		private protected override void reclaimRecycledObject(PooledObject recycled) {
 			if(extras.Contains(recycled)) {

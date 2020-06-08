@@ -14,8 +14,8 @@ namespace Replicator {
 		/// <summary>The total number of variants provided by the pool</summary>
 		public int VariantCount => variants.Length + 1;
 
-		protected override void initialisePool() {
-			base.initialisePool();
+		protected override void InitialisePool() {
+			base.InitialisePool();
 			variantPools = new Dictionary<GameObject, Stack<GameObject>>();
 			foreach(GameObject variant in variants) {
 				if(variant == null) continue;
@@ -23,54 +23,54 @@ namespace Replicator {
 			}
 		}
 
-		protected override void registerSelf() {
-			base.registerSelf();
+		protected override void RegisterSelf() {
+			base.RegisterSelf();
 			foreach(GameObject variant in variants) {
 				if(variant == null) continue;
 				PoolRegistry.Pools.Add(variant, this);
 			}
 		}
 
-		protected override void deregisterSelf() {
-			base.deregisterSelf();
+		protected override void DeregisterSelf() {
+			base.DeregisterSelf();
 			foreach(GameObject variant in variants) {
 				if(variant == null) continue;
 				PoolRegistry.Pools.Remove(variant);
 			}
 		}
 
-		protected override void addNewObjects(int amountToPreload) {
+		protected override void AddNewObjects(int amountToPreload) {
 			int preloadPerVariant = amountToPreload / (variants.Length + 1);
 			int variantsWithExtra = amountToPreload % (variants.Length + 1);
-			base.addNewObjects(preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
+			base.AddNewObjects(preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
 			foreach(GameObject variant in variants) {
 				if(variant == null) continue;
 				populatePool(variant, preloadPerVariant + (variantsWithExtra-- > 0 ? 1 : 0));
 			}
 		}
 
-		protected override GameObject getObjectToSpawn() {
+		protected override GameObject GetObjectToSpawn() {
 			int spawnIndex = GetSpawnIndex(availableVariantIndicies());
-			if(spawnIndex == 0) return base.getObjectToSpawn();
+			if(spawnIndex == 0) return base.GetObjectToSpawn();
 			return variantPools[variants[spawnIndex - 1]].Pop();
 		}
 
 		protected abstract int GetSpawnIndex(int[] availableVariantIndicies);
 
-		protected override bool hasAvailableSpawnees() {
+		protected override bool HasAvailableSpawnees() {
 			foreach(Stack<GameObject> pool in variantPools.Values) if(pool.Count > 0) return true;
-			return base.hasAvailableSpawnees();
+			return base.HasAvailableSpawnees();
 		}
 
 		private void populatePool(GameObject pooledObject, int amountToAdd) {
 			for(int i = 0; i < amountToAdd; i++) {
-				variantPools[pooledObject].Push(instantiateInactive(pooledObject));
+				variantPools[pooledObject].Push(InstantiateInactive(pooledObject));
 			}
 		}
 
 		private int[] availableVariantIndicies() {
 			List<int> collector = new List<int>();
-			if(base.hasAvailableSpawnees()) {
+			if(base.HasAvailableSpawnees()) {
 				collector.Add(0);
 			}
 			foreach(GameObject variant in variants) {
