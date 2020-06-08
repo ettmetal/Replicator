@@ -24,7 +24,7 @@ namespace Replicator {
 		}
 
 		private static GameObject spawn(GameObject self, Transform parent, Vector3 position, Quaternion rotation) {
-			return PoolRegistry.pools[self]?.Spawn(position, rotation, parent);
+			return PoolRegistry.Pools[self]?.Spawn(position, rotation, parent);
 		}
 	}
 }

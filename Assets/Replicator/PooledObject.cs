@@ -40,7 +40,7 @@ namespace Replicator {
 		public void SetOwner(ObjectPool newOwner) {
 			if(owner == null) {
 				owner = newOwner;
-				PoolRegistry.pools.Add(gameObject, owner);
+				PoolRegistry.Pools.Add(gameObject, owner);
 				owner.OnDisablePool += deregisterInstance;
 			}
 			else {
@@ -49,7 +49,7 @@ namespace Replicator {
 		}
 
 		private void deregisterInstance() {
-			PoolRegistry.pools.Remove(gameObject);
+			PoolRegistry.Pools.Remove(gameObject);
 			owner.OnDisablePool -= deregisterInstance;
 		}
 
