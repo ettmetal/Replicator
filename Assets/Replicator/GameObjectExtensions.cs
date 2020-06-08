@@ -2,9 +2,7 @@
 
 namespace Replicator {
 	public static partial class GameObjectExtensions {
-		/// <summary>
-		/// Recycle this GameObject, if it belongs to a pool.
-		/// </summary>
+		/// <summary>Recycle this GameObject, if it belongs to a pool.</summary>
 		public static void Recycle(this GameObject self) => self.GetComponent<PooledObject>()?.Recycle();
 
 		/// <summary>
@@ -15,7 +13,7 @@ namespace Replicator {
 		}
 
 		/// <summary>
-		/// Spawn a copy of this GameObject, if it belongs to a pool. Optionally provide a <paramref name="parent" to assign to the spawned GameObject.
+		/// Spawn a copy of this GameObject, if it belongs to a pool. Optionally provide a <paramref name="parent"/> to assign to the spawned GameObject.
 		/// </summary>
 		/// <param name="position">The position to spawn the GameObject.</param>
 		/// <param name="rotation">The rotation to apply to the spawned GameObject.</param>

@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Replicator {
-	/// <summary>
-	/// Asset representing and providing a pool of GameObjects.
-	/// </summary>
+	/// <summary>Asset representing and providing a pool of GameObjects.</summary>
 	[CreateAssetMenu(menuName = Strings.PoolMenuName, fileName = Strings.PoolFileName, order = 203)]
 	public class ObjectPool : ScriptableObject {
 		[SerializeField, Tooltip(Strings.PrefabTooltip)]
@@ -44,9 +42,7 @@ namespace Replicator {
 			if(preLoad > 0) addNewObjects(preLoad);
 		}
 
-		/// <summary>
-		/// Spawn a GameObject from the pool, if one is available.
-		/// </summary>
+		/// <summary>Spawn a GameObject from the pool, if one is available.</summary>
 		/// <param name="position">Position of the spawned GameObject</param>
 		/// <param name="rotation">Rotation of the spawned GameObject</param>
 		/// <param name="parent">(optional) Parent of the spawned GameObject</param>
@@ -69,9 +65,7 @@ namespace Replicator {
 			return spawned.gameObject;
 		}
 
-		/// <summary>
-		/// Recycle the <paramref name="gameObject"/> if it belongs to this pool.
-		/// </summary>
+		/// <summary>Recycle the <paramref name="gameObject"/> if it belongs to this pool.</summary>
 		public void Recycle(GameObject gameObject) {
 			PooledObject pooledObject = gameObject.GetComponent<PooledObject>();
 			if(pooledObject == null) {
