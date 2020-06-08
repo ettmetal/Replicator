@@ -43,6 +43,7 @@ namespace Replicator {
 		public void StopTimer() {
 			StopCoroutine(countdownCoroutine);
 			countdownCoroutine = null;
+			reset();
 			Timeout -= onTimeout;
 		}
 
