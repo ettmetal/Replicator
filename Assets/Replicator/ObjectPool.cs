@@ -28,14 +28,14 @@ namespace Replicator {
 		protected virtual bool canSpawn => activeObjectCount + pool.Count < capacity;
 		protected virtual bool canGrow => growth != GrowthStrategy.None;
 
-		private void OnEnable() {
+		protected virtual void OnEnable() {
 			preLoad = preLoad == ushort.MaxValue ? capacity : preLoad;
 			initialisePool();
 			registerSelf();
 			SceneManager.sceneLoaded += onSceneLoaded;
 		}
 
-		private void OnDisable() {
+		protected virtual void OnDisable() {
 			deregisterSelf();
 			OnDisablePool?.Invoke();
 		}
