@@ -3,9 +3,9 @@
 namespace Replicator {
 	[AddComponentMenu("")] // Prevents this Component from appearing in the Unity editor.
 	internal class PooledObject : MonoBehaviour
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 	, IPooled // Interface used to manage HideFlags, no use outside editor
-	#endif
+#endif
 	{
 		private ObjectPool owner;
 		private bool recycleFlag;
@@ -43,7 +43,9 @@ namespace Replicator {
 				PoolRegistry.pools.Add(gameObject, owner);
 				owner.OnDisablePool += deregisterInstance;
 			}
-			else Debug.Log(Strings.SetOwnerOnOwned);
+			else {
+				Debug.Log(Strings.SetOwnerOnOwned);
+			}
 		}
 
 		private void deregisterInstance() {
@@ -55,6 +57,6 @@ namespace Replicator {
 
 		public void Recycle() => recycleFlag = true;
 
-		public GameObject Spawn(GameObject original) => owner.Spawn(transform.position, Quaternion.identity);
+		public GameObject Spawn() => owner.Spawn(transform.position, Quaternion.identity);
 	}
 }

@@ -59,7 +59,9 @@ namespace Replicator {
 				extras.Remove(recycled);
 				cullQueue.Push(recycled);
 			}
-			else base.reclaimRecycledObject(recycled);
+			else {
+				base.reclaimRecycledObject(recycled);
+			}
 		}
 
 		private GameObject getBurstInstance() => cullQueue.Count > 0 ? reviveObjectMarkedForCull() : extras[0].gameObject;

@@ -1,5 +1,3 @@
-#pragma warning disable 649 // Prevent field not initialized warnings
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
