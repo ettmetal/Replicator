@@ -50,12 +50,12 @@ namespace Replicator {
 		}
 
 		protected override GameObject getObjectToSpawn() {
-			int spawnIndex = getSpawnIndex(availableVariantIndicies());
+			int spawnIndex = GetSpawnIndex(availableVariantIndicies());
 			if(spawnIndex == 0) return base.getObjectToSpawn();
 			return variantPools[variants[spawnIndex - 1]].Pop();
 		}
 
-		protected abstract int getSpawnIndex(int[] availableVariantIndicies);
+		protected abstract int GetSpawnIndex(int[] availableVariantIndicies);
 
 		protected override bool hasAvailableSpawnees() {
 			foreach(Stack<GameObject> pool in variantPools.Values) if(pool.Count > 0) return true;

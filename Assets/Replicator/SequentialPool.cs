@@ -8,7 +8,7 @@ namespace Replicator {
 	public class SequentialPool : VariantPool {
 		private int lastSpawnedIndex = 0;
 
-		protected override int getSpawnIndex(int[] availableVariantIndicies) {
+		protected override int GetSpawnIndex(int[] availableVariantIndicies) {
 			lastSpawnedIndex = ++lastSpawnedIndex % VariantCount;
 			return closestAvailableToDesired(lastSpawnedIndex, availableVariantIndicies);
 		}
