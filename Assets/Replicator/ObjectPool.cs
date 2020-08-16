@@ -24,7 +24,18 @@ namespace Replicator {
 		protected virtual bool CanSpawn => activeObjectCount + pool.Count < capacity;
 		protected virtual bool CanGrow => growth != GrowthStrategy.None;
 
-		protected virtual void OnEnable() {
+		public static ObjectPool Create(GameObject prefab, ushort capacity = 0, ushort preLoad = 0, GrowthStrategy growth = 0) {
+			ObjectPool newPool = CreateInstance<ObjectPool>();
+			newPool.prefab = prefab;
+			newPool.capacity = capacity;
+			newPool.preLoad = preLoad;
+			newPool.growth = growth;
+			newPool.OnEnable();
+			return newPool;
+		}
+
+		protected virtual void OnEnable() { // Check if can be initialised, work around
+			if(prefab == null) return;
 			preLoad = preLoad == ushort.MaxValue ? capacity : preLoad;
 			InitialisePool();
 			RegisterSelf();
