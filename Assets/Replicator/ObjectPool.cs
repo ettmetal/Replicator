@@ -24,6 +24,9 @@ namespace Replicator {
 		protected virtual bool CanSpawn => activeObjectCount + pool.Count < capacity;
 		protected virtual bool CanGrow => growth != GrowthStrategy.None;
 
+		/// <summary>
+		/// Create a new <see cref="ObjectPool" /> with the given parameters.
+		/// </summary>
 		public static ObjectPool Create(GameObject prefab, ushort capacity = 0, ushort preLoad = 0, GrowthStrategy growth = 0) {
 			ObjectPool newPool = CreateInstance<ObjectPool>();
 			newPool.Initialise(prefab, capacity, preLoad, growth);
