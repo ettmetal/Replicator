@@ -1,5 +1,4 @@
-﻿#pragma warning disable 649 // Prevent field not initialized warnings
-
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,12 +6,17 @@ namespace Replicator {
 	/// <summary>Asset representing and providing a mixed pool of GameObjects.</summary>
 	public abstract class VariantPool : ObjectPool {
 		[SerializeField]
-		private GameObject[] variants;
+		private GameObject[] variants = null;
 
 		private Dictionary<GameObject, Stack<GameObject>> variantPools;
 
 		/// <summary>The total number of variants provided by the pool</summary>
 		public int VariantCount => variants.Length + 1;
+
+		internal void Initialise(GameObject[] allVariants, ushort capacity = 0, ushort preLoad = 0, GrowthStrategy growth = 0) {
+			base.Initialise(allVariants[0], capacity, preLoad, growth);
+			Array.Copy(allVariants, 1, variants, 0, allVariants.Length);
+		}
 
 		protected override void InitialisePool() {
 			base.InitialisePool();
