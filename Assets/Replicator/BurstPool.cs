@@ -18,6 +18,17 @@ namespace Replicator {
 
 		private CountdownTimer cullTimer;
 
+		/// <summary>
+		/// Create a new <see cref="BurstPool" />, with the given parameters.
+		/// </summary>
+		public static BurstPool Create(GameObject prefab, ushort capacity = 0, ushort preLoad = 0, GrowthStrategy growth = 0, int maxCulledInstances = 10, float cullInterval = 5f) {
+			BurstPool newPool = CreateInstance<BurstPool>();
+			newPool.Initialise(prefab, capacity, preLoad, growth);
+			newPool.maxCulledInstances = maxCulledInstances;
+			newPool.cullInterval = cullInterval;
+			return newPool;
+		}
+
 		protected override void OnEnable() {
 			base.OnEnable();
 			SceneManager.sceneLoaded += onSceneLoaded;
