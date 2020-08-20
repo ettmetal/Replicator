@@ -26,12 +26,16 @@ namespace Replicator {
 
 		public static ObjectPool Create(GameObject prefab, ushort capacity = 0, ushort preLoad = 0, GrowthStrategy growth = 0) {
 			ObjectPool newPool = CreateInstance<ObjectPool>();
-			newPool.prefab = prefab;
-			newPool.capacity = capacity;
-			newPool.preLoad = preLoad;
-			newPool.growth = growth;
+			newPool.Initialise(prefab, capacity, preLoad, growth);
 			newPool.OnEnable();
 			return newPool;
+		}
+
+		internal virtual void Initialise(GameObject prefab, ushort capacity, ushort preLoad, GrowthStrategy growth) {
+			this.prefab = prefab;
+			this.capacity = capacity;
+			this.preLoad = preLoad;
+			this.growth = growth;
 		}
 
 		protected virtual void OnEnable() { // Check if can be initialised, work around
