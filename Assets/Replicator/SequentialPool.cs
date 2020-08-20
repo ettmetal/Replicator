@@ -8,6 +8,15 @@ namespace Replicator {
 	public class SequentialPool : VariantPool {
 		private int lastSpawnedIndex = 0;
 
+		/// <summary>
+		/// Create a new <see cref="SequentialPool"/> with the given parameters.
+		/// </summary>
+		public static SequentialPool Create(GameObject[] allVariants, ushort capacity = 0, ushort preLoad = 0, GrowthStrategy growth = 0) {
+			SequentialPool newPool = CreateInstance<SequentialPool>();
+			newPool.Initialise(allVariants, capacity, preLoad, growth);
+			return newPool;
+		}
+
 		protected override int GetSpawnIndex(int[] availableVariantIndicies) {
 			lastSpawnedIndex = ++lastSpawnedIndex % VariantCount;
 			return closestAvailableToDesired(lastSpawnedIndex, availableVariantIndicies);
